@@ -1,0 +1,54 @@
+apiVersion: apps/v1
+kind: Namespace
+apiVersion: v1
+metadata:
+  name: tp-kube-3
+  labels:
+    name: tp-kube-3
+---
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: mysql
+  namespace: tp-kube-3
+  labels:
+    app: mysql
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: mysql
+  template:
+    metadata:
+      labels:
+        app: mysql
+    spec:
+      containers:
+      - name: mysql
+        image: mysql:5.7
+        ports:
+        - containerPort: 3306
+          name: mysql-port
+        env:
+        - name: MYSQL_ROOT_PASSWORD
+          value: test
+        - name: MYSQL_DATABASE
+          value: tp
+        - name: MYSQL_USER
+          value: test
+        - name: MYSQL_PASSWORD
+          value: test
+---
+apiVersion: v1
+kind: Service
+metadata:
+  name: mysql-service
+  namespace: tp-kube-3
+spec:
+  selector:
+    label: mysql
+  ports:
+  - name: mysql-port
+    protocol: TCP
+    port: 3306
+    targetPort: 3306

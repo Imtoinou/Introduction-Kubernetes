@@ -1,0 +1,72 @@
+apiVersion: apps/v1
+kind: Namespace
+apiVersion: v1
+metadata:
+  name: tp-kube-3
+  labels:
+    name: tp-kube-3
+---
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: nginx-deployment
+  namespace: tp-kube-3
+  labels:
+    app: tp-kube-3
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: tp-kube-3
+  template:
+    metadata:
+      labels:
+        app: tp-kube-3
+    spec:
+      containers:
+      - name: mysql
+        image: mysql:5.7
+        ports:
+        - containerPort: 3306
+          name: mysql-port
+        env:
+        - name: MYSQL_ROOT_PASSWORD
+          value: test
+        - name: MYSQL_DATABASE
+          value: tp
+        - name: MYSQL_USER
+          value: test
+        - name: MYSQL_PASSWORD
+          value: test
+      - name: phpmyadmin
+        image: phpmyadmin:latest
+        ports:
+        - containerPort: 80
+          name: http-pma
+        env:
+        - name: PMA_HOST
+          value: localhost
+        - name: PMA_PORT
+          value: 3306
+        - name: PMA_ARBITRARY
+          value: 1
+        - name: PMA_USER
+          value: test
+---
+apiVersion: v1
+kind: Service
+metadata:
+  name: kube-tp-service
+spec:
+  selector:
+    app.kubernetes.io/name: tp-kube-3
+  ports:
+  - name: mysql-port
+    protocol: TCP
+    port: 3306
+    targetPort: 3306
+  ports:
+  - name: http-pma
+    protocol: TCP
+    port: 8080
+    targetPort: 80
