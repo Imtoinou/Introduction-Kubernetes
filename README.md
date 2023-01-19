@@ -34,6 +34,7 @@ Forward du port : `kubectl port-forward webserver 8080:`
 kubectl apply -f mysql.yaml
 kubectl apply -f phpmyadmin.yaml
 
+## 3. Connexion entre plusieurs Pods
 
 
 
