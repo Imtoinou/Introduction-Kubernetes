@@ -36,6 +36,7 @@ kubectl apply -f phpmyadmin.yaml
 
 ## 3. Connexion entre plusieurs Pods
 
-
+Les parties a,b,c sont dans les fichiers mysql.yaml et phpmyadmin.yaml
+La partie d : `kubectl port-forward -n tp-kube-3 phpmyadmin-7d845f97c7-qfk5d 8080:80`
 
 
